@@ -21,27 +21,27 @@ class ShadowViewController: UITableViewController {
         }
     }
     
-    @IBAction func shadowOffsetWidthValueChanged(sender: UIStepper) {
+    @IBAction func shadowOffsetWidthValueChanged(_ sender: UIStepper) {
         currentShadow.shadowOffset.width += CGFloat(sender.value)
         shadowDidChange()
     }
     
-    @IBAction func shadowOffsetHeightValueChanged(sender: UIStepper) {
+    @IBAction func shadowOffsetHeightValueChanged(_ sender: UIStepper) {
         currentShadow.shadowOffset.height += CGFloat(sender.value)
         shadowDidChange()
     }
 
-    @IBAction func shadowBlurRadiusValueChanged(sender: UIStepper) {
+    @IBAction func shadowBlurRadiusValueChanged(_ sender: UIStepper) {
         currentShadow.shadowBlurRadius += CGFloat(sender.value)
         shadowDidChange()
     }
     
-    @IBAction func shadowColorButtonTapped(sender: UIButton) {
+    @IBAction func shadowColorButtonTapped(_ sender: UIButton) {
         currentShadow.shadowColor = sender.backgroundColor!;
         shadowDidChange()
     }
     
     func shadowDidChange() {
-        completion(self.currentShadow.copy())
+        completion(self.currentShadow.copy() as AnyObject)
     }
 }

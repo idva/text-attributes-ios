@@ -40,11 +40,11 @@ class ParagraphStyleViewController: UITableViewController {
     
     // MARK: - Table View
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return paragraphAttributes.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let attribute = paragraphAttributes[indexPath.row]
         
@@ -82,18 +82,18 @@ class ParagraphStyleViewController: UITableViewController {
             cell = hyphenationFactorTableViewCellAtIndexPath(indexPath)
             
         default:
-            cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
+            cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) 
         }
         
-        cell.textLabel?.font = UIFont.systemFontOfSize(12.0)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 12.0)
         cell.textLabel?.text = attribute
-        cell.textLabel?.backgroundColor = UIColor.clearColor()
+        cell.textLabel?.backgroundColor = UIColor.clear
  
         return cell
     }
     
-    func headIndentTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpacingAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func headIndentTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpacingAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.headIndent);
         cell.completion =  {
             return { value in
@@ -104,8 +104,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func firstLineHeadIndentTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpacingAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func firstLineHeadIndentTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpacingAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.firstLineHeadIndent);
         cell.completion =  {
             return { value in
@@ -116,8 +116,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func tailIndentTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpacingAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func tailIndentTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpacingAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.tailIndent);
         cell.completion =  {
             return { value in
@@ -128,8 +128,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func minimumLineHeightTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("LineHeightAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func minimumLineHeightTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LineHeightAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.minimumLineHeight);
         cell.completion =  {
             return { value in
@@ -140,8 +140,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func maximumLineHeightTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("LineHeightAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func maximumLineHeightTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LineHeightAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.maximumLineHeight);
         cell.completion =  {
             return { value in
@@ -152,8 +152,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func lineSpacingTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("LineHeightAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func lineSpacingTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LineHeightAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.lineSpacing);
         cell.completion =  {
             return { value in
@@ -164,8 +164,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func paragraphSpacingTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("LineHeightAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func paragraphSpacingTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LineHeightAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.paragraphSpacing);
         cell.completion =  {
             return { value in
@@ -176,8 +176,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func paragraphSpacingBeforeTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("LineHeightAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func paragraphSpacingBeforeTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LineHeightAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.paragraphSpacingBefore);
         cell.completion =  {
             return { value in
@@ -188,8 +188,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func lineHeightMultipleTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MultilierAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func lineHeightMultipleTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MultilierAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.lineHeightMultiple);
         cell.completion =  {
             return { value in
@@ -200,8 +200,8 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    func hyphenationFactorTableViewCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("HyphenationAttributeCell", forIndexPath: indexPath) as! StepperTableViewCell
+    func hyphenationFactorTableViewCellAtIndexPath(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HyphenationAttributeCell", for: indexPath) as! StepperTableViewCell
         cell.stepper.value = Double(currentParagraphStyle.hyphenationFactor);
         cell.completion =  {
             return { value in
@@ -212,7 +212,7 @@ class ParagraphStyleViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
             
         case 0:
@@ -230,19 +230,19 @@ class ParagraphStyleViewController: UITableViewController {
     }
 
     func paragraphStyleDidChange() {
-        completion(currentParagraphStyle.copy())
+        completion(currentParagraphStyle.copy() as AnyObject)
     }
     
     func showAlignmentAttributeViewController() {
         let writingDirection: [Attribute] = [
-            Attribute(name: ".Natural", value: NSTextAlignment.Natural.rawValue),
-            Attribute(name: ".Left", value: NSTextAlignment.Left.rawValue),
-            Attribute(name: ".Right", value: NSTextAlignment.Right.rawValue),
-            Attribute(name: ".Center", value: NSTextAlignment.Center.rawValue),
-            Attribute(name: ".Justified", value: NSTextAlignment.Justified.rawValue)
+            Attribute(name: ".Natural", value: NSTextAlignment.natural.rawValue),
+            Attribute(name: ".Left", value: NSTextAlignment.left.rawValue),
+            Attribute(name: ".Right", value: NSTextAlignment.right.rawValue),
+            Attribute(name: ".Center", value: NSTextAlignment.center.rawValue),
+            Attribute(name: ".Justified", value: NSTextAlignment.justified.rawValue)
         ]
         
-        let attributeTableViewController = storyboard?.instantiateViewControllerWithIdentifier("AttributeTableViewController") as! AttributeTableViewController
+        let attributeTableViewController = storyboard?.instantiateViewController(withIdentifier: "AttributeTableViewController") as! AttributeTableViewController
         attributeTableViewController.attributes = writingDirection
         attributeTableViewController.completion = {
             return { value in
@@ -257,14 +257,14 @@ class ParagraphStyleViewController: UITableViewController {
     
     func showLineBreakModeAttributeViewController() {
         let lineBreakModeAttributes: [Attribute] = [
-            Attribute(name: ".ByWordWrapping", value: NSLineBreakMode.ByWordWrapping.rawValue),
-            Attribute(name: ".ByCharWrapping", value: NSLineBreakMode.ByCharWrapping.rawValue),
-            Attribute(name: ".ByClipping", value: NSLineBreakMode.ByClipping.rawValue),
-            Attribute(name: ".ByTruncatingHead", value: NSLineBreakMode.ByTruncatingHead.rawValue),
-            Attribute(name: ".ByTruncatingTail", value: NSLineBreakMode.ByTruncatingTail.rawValue),
-            Attribute(name: ".ByTruncatingMiddle", value: NSLineBreakMode.ByTruncatingMiddle.rawValue)]
+            Attribute(name: ".ByWordWrapping", value: NSLineBreakMode.byWordWrapping.rawValue),
+            Attribute(name: ".ByCharWrapping", value: NSLineBreakMode.byCharWrapping.rawValue),
+            Attribute(name: ".ByClipping", value: NSLineBreakMode.byClipping.rawValue),
+            Attribute(name: ".ByTruncatingHead", value: NSLineBreakMode.byTruncatingHead.rawValue),
+            Attribute(name: ".ByTruncatingTail", value: NSLineBreakMode.byTruncatingTail.rawValue),
+            Attribute(name: ".ByTruncatingMiddle", value: NSLineBreakMode.byTruncatingMiddle.rawValue)]
         
-        let attributeTableViewController = storyboard?.instantiateViewControllerWithIdentifier("AttributeTableViewController") as! AttributeTableViewController
+        let attributeTableViewController = storyboard?.instantiateViewController(withIdentifier: "AttributeTableViewController") as! AttributeTableViewController
         attributeTableViewController.attributes = lineBreakModeAttributes
         attributeTableViewController.completion = {
             return { value in
@@ -279,15 +279,15 @@ class ParagraphStyleViewController: UITableViewController {
     
     func showWritingDirectionAttributeViewController() {
         let writingDirection: [Attribute] = [
-            Attribute(name: "NSWritingDirection.Natural", value: NSWritingDirection.Natural.rawValue),
-            Attribute(name: "NSWritingDirection.LeftToRight", value: NSWritingDirection.LeftToRight.rawValue),
-            Attribute(name: "NSWritingDirection.RightToLeft", value: NSWritingDirection.RightToLeft.rawValue),
+            Attribute(name: "NSWritingDirection.Natural", value: NSWritingDirection.natural.rawValue),
+            Attribute(name: "NSWritingDirection.LeftToRight", value: NSWritingDirection.leftToRight.rawValue),
+            Attribute(name: "NSWritingDirection.RightToLeft", value: NSWritingDirection.rightToLeft.rawValue),
             
-            Attribute(name: "NSTextWritingDirection.Embedding", value: NSTextWritingDirection.Embedding.rawValue),
-            Attribute(name: "NSTextWritingDirection.Override", value: NSTextWritingDirection.Override.rawValue)
+            Attribute(name: "NSTextWritingDirection.Embedding", value: NSTextWritingDirection.embedding.rawValue),
+            Attribute(name: "NSTextWritingDirection.Override", value: NSTextWritingDirection.override.rawValue)
         ]
         
-        let attributeTableViewController = self.storyboard?.instantiateViewControllerWithIdentifier("AttributeTableViewController") as! AttributeTableViewController
+        let attributeTableViewController = self.storyboard?.instantiateViewController(withIdentifier: "AttributeTableViewController") as! AttributeTableViewController
         attributeTableViewController.attributes = writingDirection
         attributeTableViewController.completion = {
             return { value in

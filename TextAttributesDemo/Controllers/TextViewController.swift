@@ -49,75 +49,75 @@ class TextViewController: UIViewController, NSTextStorageDelegate {
         
         // Создаем UITextView c заданным NSTextContainer
         textView = UITextView(frame: textContainerView.bounds, textContainer: textContainer)
-        textView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         textView.textContainerInset = UIEdgeInsetsMake(30, 30, 30, 30)
-        textView.editable = false
+        textView.isEditable = false
         textContainerView.addSubview(textView)
 
         setupDefaultState()
     }
     
     func setupDefaultState() {
-        let path = NSBundle.mainBundle().pathForResource("Alice", ofType: "txt")
-        let text = try! String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-        let attributedString = NSAttributedString(string: text, attributes: [NSFontAttributeName : UIFont.systemFontOfSize(50.0)])
+        let path = Bundle.main.path(forResource: "Alice", ofType: "txt")
+        let text = try! String(contentsOfFile: path!, encoding: String.Encoding.utf8)
+        let attributedString = NSAttributedString(string: text, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 50.0)])
         textStorage.setAttributedString(attributedString)
-        lineHeightSwitch.on = false
-        ascenderSwitch.on = false
-        descenderSwitch.on = false
-        capHeightSwitch.on = false
-        xHeightSwitch.on = false
-        boundingRectSwitch.on = false
-        baselineSwitch.on = false
-        meanlineSwitch.on = false
-        lineGapSwitch.on = false
-        usesFontLeadingSwitch.on = true
+        lineHeightSwitch.isOn = false
+        ascenderSwitch.isOn = false
+        descenderSwitch.isOn = false
+        capHeightSwitch.isOn = false
+        xHeightSwitch.isOn = false
+        boundingRectSwitch.isOn = false
+        baselineSwitch.isOn = false
+        meanlineSwitch.isOn = false
+        lineGapSwitch.isOn = false
+        usesFontLeadingSwitch.isOn = true
         layoutManager.showLineFragment = true
         textRenderingValueChanged()
         
     }
     
     @IBAction func textRenderingValueChanged() {
-        layoutManager.showLineHeight = lineHeightSwitch.on
-        layoutManager.showAscender = ascenderSwitch.on
-        layoutManager.showDescender = descenderSwitch.on
-        layoutManager.showCapHeight = capHeightSwitch.on
-        layoutManager.showXHeight = xHeightSwitch.on
-        layoutManager.showLineGap = lineGapSwitch.on
-        layoutManager.showBoundingRect = boundingRectSwitch.on
-        layoutManager.showBaseline = baselineSwitch.on
-        layoutManager.showMeanline = meanlineSwitch.on
-        layoutManager.usesFontLeading = usesFontLeadingSwitch.on
-        layoutManager.invalidateLayoutForCharacterRange(NSMakeRange(0, textStorage.length), actualCharacterRange: nil)
+        layoutManager.showLineHeight = lineHeightSwitch.isOn
+        layoutManager.showAscender = ascenderSwitch.isOn
+        layoutManager.showDescender = descenderSwitch.isOn
+        layoutManager.showCapHeight = capHeightSwitch.isOn
+        layoutManager.showXHeight = xHeightSwitch.isOn
+        layoutManager.showLineGap = lineGapSwitch.isOn
+        layoutManager.showBoundingRect = boundingRectSwitch.isOn
+        layoutManager.showBaseline = baselineSwitch.isOn
+        layoutManager.showMeanline = meanlineSwitch.isOn
+        layoutManager.usesFontLeading = usesFontLeadingSwitch.isOn
+        layoutManager.invalidateLayout(forCharacterRange: NSMakeRange(0, textStorage.length), actualCharacterRange: nil)
     }
     
-    func updatefontMetricsLabel(font: UIFont) {
+    func updatefontMetricsLabel(_ font: UIFont) {
         let metrics = NSMutableArray()
-        metrics.addObject(NSString(format: "point size %.2f", font.pointSize))
-        metrics.addObject(NSString(format: "line height %.2f", font.lineHeight))
-        metrics.addObject(NSString(format: "ascender %.2f", font.ascender))
-        metrics.addObject(NSString(format: "descender %.2f", font.descender))
-        metrics.addObject(NSString(format: "leading %.2f", font.leading))
-        metrics.addObject(NSString(format: "cap height %.2f", font.capHeight))
-        metrics.addObject(NSString(format: "xHeight %.2f", font.xHeight))
-        self.fontMetricsLabel.text = metrics.componentsJoinedByString("\n")
+        metrics.add(NSString(format: "point size %.2f", font.pointSize))
+        metrics.add(NSString(format: "line height %.2f", font.lineHeight))
+        metrics.add(NSString(format: "ascender %.2f", font.ascender))
+        metrics.add(NSString(format: "descender %.2f", font.descender))
+        metrics.add(NSString(format: "leading %.2f", font.leading))
+        metrics.add(NSString(format: "cap height %.2f", font.capHeight))
+        metrics.add(NSString(format: "xHeight %.2f", font.xHeight))
+        self.fontMetricsLabel.text = metrics.componentsJoined(by: "\n")
     }
     
     // MARK - NSTextStorageDelegate
     
-    func textStorage(textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        let fontAttribute = textStorage.attribute(NSFontAttributeName, atIndex: editedRange.location, effectiveRange: nil)
+    func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorageEditActions, range editedRange: NSRange, changeInLength delta: Int) {
+        let fontAttribute = textStorage.attribute(NSAttributedStringKey.font, at: editedRange.location, effectiveRange: nil)
         if let font = fontAttribute as? UIFont {
             updatefontMetricsLabel(font)
         }
         
         // redraw selection
         let beginning: UITextPosition = textView.beginningOfDocument
-        let start: UITextPosition = textView.positionFromPosition(beginning, offset: textView.selectedRange.location)!
-        let end: UITextPosition = textView.positionFromPosition(start, offset: textView.selectedRange.length)!
+        let start: UITextPosition = textView.position(from: beginning, offset: textView.selectedRange.location)!
+        let end: UITextPosition = textView.position(from: start, offset: textView.selectedRange.length)!
         
         textView.selectedRange = NSMakeRange(0, 0)
-        textView.selectedTextRange = textView.textRangeFromPosition(start, toPosition: end)
+        textView.selectedTextRange = textView.textRange(from: start, to: end)
     }
 }
 

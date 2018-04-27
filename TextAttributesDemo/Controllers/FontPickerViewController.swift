@@ -28,11 +28,11 @@ class FontPickerViewController: UITableViewController, UISearchBarDelegate {
     func createFontFamilies() -> [FontFamily] {
         var families = [FontFamily]()
 
-        for fontFamilyName in UIFont.familyNames() {
-            var filteredFonts = UIFont.fontNamesForFamilyName(fontFamilyName)
-            if filterString.characters.count > 0 {
+        for fontFamilyName in UIFont.familyNames {
+            var filteredFonts = UIFont.fontNames(forFamilyName: fontFamilyName)
+            if filterString.count > 0 {
                 filteredFonts = filteredFonts.filter{
-                     $0.lowercaseString.rangeOfString(self.filterString.lowercaseString) != nil
+                     $0.lowercased().range(of: self.filterString.lowercased()) != nil
                 }
             }
             
@@ -54,21 +54,21 @@ class FontPickerViewController: UITableViewController, UISearchBarDelegate {
 
     // MARK: - UITableViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return fontFamilies.count;
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let fontFamily = fontFamilies[section]
         return fontFamily.fonts.count
     }
    
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return  fontFamilies[section].familyName
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) 
 
         let fontFamily = fontFamilies[indexPath.section]
         let fontName = fontFamily.fonts[indexPath.row]
@@ -81,11 +81,11 @@ class FontPickerViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        view.tintColor = UIColor.lightGrayColor();
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = UIColor.lightGray;
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let fontFamily = fontFamilies[indexPath.section]
         let fontName = fontFamily.fonts[indexPath.row]
         currentFont = UIFont(name: fontName, size:CGFloat(slider.value))
@@ -94,25 +94,25 @@ class FontPickerViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: - UISearchBarDelegate
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterString = searchText
         fontFamilies = self.createFontFamilies()
         tableView.reloadData()
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
 
     // MARK: - Actions
 
-    @IBAction func sliderValueChanged(slider: UISlider) {
+    @IBAction func sliderValueChanged(_ slider: UISlider) {
         let pointSize = CGFloat(slider.value)
-        currentFont = currentFont?.fontWithSize(pointSize)
+        currentFont = currentFont?.withSize(pointSize)
         self.updateUI()
     }
     

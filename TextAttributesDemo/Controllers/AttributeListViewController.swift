@@ -21,25 +21,25 @@ class AttributeListViewController: UITableViewController {
     var detailViewController: TextViewController!
     
     var availableAttributes = [
-        NSFontAttributeName,
-        NSForegroundColorAttributeName,
-        NSBackgroundColorAttributeName,
-        NSLigatureAttributeName,
-        NSKernAttributeName,
-        NSStrikethroughStyleAttributeName,
-        NSStrikethroughColorAttributeName,
-        NSUnderlineStyleAttributeName,
-        NSUnderlineColorAttributeName,
-        NSStrokeColorAttributeName,
-        NSStrokeWidthAttributeName,
-        NSShadowAttributeName,
-        NSParagraphStyleAttributeName,
-        NSTextEffectAttributeName,
-        NSLinkAttributeName,
-        NSBaselineOffsetAttributeName,
-        NSObliquenessAttributeName,
-        NSExpansionAttributeName,
-        NSWritingDirectionAttributeName,
+        NSAttributedStringKey.font,
+        NSAttributedStringKey.foregroundColor,
+        NSAttributedStringKey.backgroundColor,
+        NSAttributedStringKey.ligature,
+        NSAttributedStringKey.kern,
+        NSAttributedStringKey.strikethroughStyle,
+        NSAttributedStringKey.strikethroughColor,
+        NSAttributedStringKey.underlineStyle,
+        NSAttributedStringKey.underlineColor,
+        NSAttributedStringKey.strokeColor,
+        NSAttributedStringKey.strokeWidth,
+        NSAttributedStringKey.shadow,
+        NSAttributedStringKey.paragraphStyle,
+        NSAttributedStringKey.textEffect,
+        NSAttributedStringKey.link,
+        NSAttributedStringKey.baselineOffset,
+        NSAttributedStringKey.obliqueness,
+        NSAttributedStringKey.expansion,
+        NSAttributedStringKey.writingDirection,
     ];
     
     override func viewDidLoad() {
@@ -52,79 +52,87 @@ class AttributeListViewController: UITableViewController {
     
     // MARK: - Table View
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return availableAttributes.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
         let attribute = availableAttributes[indexPath.row]
 
         let cell: UITableViewCell
         switch attribute {
             
-        case NSKernAttributeName, NSBaselineOffsetAttributeName, NSStrokeWidthAttributeName:
-            cell = tableView.dequeueReusableCellWithIdentifier("FloatAttributeCell", forIndexPath: indexPath) 
+        case NSAttributedStringKey.kern, NSAttributedStringKey.baselineOffset, NSAttributedStringKey.strokeWidth:
+            cell = tableView.dequeueReusableCell(withIdentifier: "FloatAttributeCell", for: indexPath) 
             if let stepperCell = cell as? StepperTableViewCell {
-                stepperCell.completion = onComplete(attribute)
+                stepperCell.completion = onComplete(attribute.rawValue)
             }
             
-        case NSLigatureAttributeName:
-            cell = tableView.dequeueReusableCellWithIdentifier("LigatureAttributeCell", forIndexPath: indexPath) 
+        case NSAttributedStringKey.ligature:
+            cell = tableView.dequeueReusableCell(withIdentifier: "LigatureAttributeCell", for: indexPath) 
             if let stepperCell = cell as? StepperTableViewCell {
-                stepperCell.completion = onComplete(attribute)
+                stepperCell.completion = onComplete(attribute.rawValue)
             }
 
-        case NSObliquenessAttributeName, NSExpansionAttributeName:
-            cell = tableView.dequeueReusableCellWithIdentifier("ObliquenessAttributeCell", forIndexPath: indexPath) 
+        case NSAttributedStringKey.obliqueness, NSAttributedStringKey.expansion:
+            cell = tableView.dequeueReusableCell(withIdentifier: "ObliquenessAttributeCell", for: indexPath) 
             if let stepperCell = cell as? StepperTableViewCell {
-                stepperCell.completion = onComplete(attribute)
+                stepperCell.completion = onComplete(attribute.rawValue)
             }
 
         default:
-            cell = tableView.dequeueReusableCellWithIdentifier("TextCell", forIndexPath: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "TextCell", for: indexPath)
         }
         
-        cell.textLabel?.font = UIFont.systemFontOfSize(20.0)
-        cell.textLabel?.text = attribute
-        cell.textLabel?.backgroundColor = UIColor.clearColor()
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 20.0)
+        cell.textLabel?.text = attribute.rawValue
+        cell.textLabel?.backgroundColor = UIColor.clear
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let attribute = availableAttributes[indexPath.row]
         
         switch attribute {
             
-        case NSFontAttributeName:
+        case NSAttributedStringKey.font:
             showFontPickerViewController()
             
-        case NSForegroundColorAttributeName, NSBackgroundColorAttributeName, NSStrokeColorAttributeName, NSUnderlineColorAttributeName, NSStrikethroughColorAttributeName:
-            let rect = tableView.rectForRowAtIndexPath(indexPath)
-            showColorPickerViewControllerWithAttribute(attribute, rect: rect)
+        case NSAttributedStringKey.foregroundColor, NSAttributedStringKey.backgroundColor, NSAttributedStringKey.strokeColor, NSAttributedStringKey.underlineColor, NSAttributedStringKey.strikethroughColor:
+            let rect = tableView.rectForRow(at: indexPath)
+            showColorPickerViewControllerWithAttribute(attribute.rawValue, rect: rect)
             
-        case NSStrikethroughStyleAttributeName, NSUnderlineStyleAttributeName:
-            showUnderlineStyleAttributeViewControllerForAttribute(attribute)
+        case NSAttributedStringKey.strikethroughStyle, NSAttributedStringKey.underlineStyle:
+            showUnderlineStyleAttributeViewControllerForAttribute(attribute.rawValue)
             
-        case NSShadowAttributeName:
+        case NSAttributedStringKey.shadow:
             showShadowViewController()
             
-        case NSParagraphStyleAttributeName:
+        case NSAttributedStringKey.paragraphStyle:
             showParagraphStyleViewController()
             
-        case NSTextEffectAttributeName:
-            let completion:AttributeCompletion = onComplete(attribute)
-            var value: AnyObject? = detailViewController.textStorage.attribute(NSTextEffectAttributeName, atIndex: 0, effectiveRange: nil)
-            value = value != nil ? nil : NSTextEffectLetterpressStyle
-            completion(value)
+        case NSAttributedStringKey.textEffect:
+            let completion:AttributeCompletion = onComplete(attribute.rawValue)
+            let value = detailViewController.textStorage.attribute(NSAttributedStringKey.textEffect, at: 0, effectiveRange: nil) as AnyObject?
+            if value != nil {
+                completion(nil)
+            } else {
+                completion(NSAttributedString.TextEffectStyle.letterpressStyle as AnyObject?)
+            }
             
-        case NSLinkAttributeName:
-            let completion:AttributeCompletion = onComplete(attribute)
+            
+        case NSAttributedStringKey.link:
+            let completion:AttributeCompletion = onComplete(attribute.rawValue)
             let range = textRange()
-            var value: AnyObject? = detailViewController.textStorage.attribute(NSLinkAttributeName, atIndex:range.location, effectiveRange: nil)
-            value = value != nil ? nil : NSURL(string: "http://rambler-co.ru")
-            completion(value)
+            let value = detailViewController.textStorage.attribute(NSAttributedStringKey.link, at:range.location, effectiveRange: nil) as AnyObject?
+            
+            if value != nil {
+                completion(nil)
+            } else {
+                completion(URL(string: "http://rambler-co.ru") as AnyObject?)
+            }
             
         default:
             return;
@@ -134,41 +142,41 @@ class AttributeListViewController: UITableViewController {
     // MARK: - Navigation
     
     func showFontPickerViewController() {
-        let fontPickerViewController = storyboard?.instantiateViewControllerWithIdentifier("FontPickerViewController") as! FontPickerViewController
+        let fontPickerViewController = storyboard?.instantiateViewController(withIdentifier: "FontPickerViewController") as! FontPickerViewController
         let range = textRange()
-        let value = detailViewController.textStorage.attribute(NSFontAttributeName, atIndex:range.location, effectiveRange: nil) as? UIFont
+        let value = detailViewController.textStorage.attribute(NSAttributedStringKey.font, at:range.location, effectiveRange: nil) as? UIFont
         fontPickerViewController.currentFont = value
-        fontPickerViewController.completion = onComplete(NSFontAttributeName)
+        fontPickerViewController.completion = onComplete(NSAttributedStringKey.font.rawValue)
         navigationController?.pushViewController(fontPickerViewController, animated: true)
     }
     
-    func showColorPickerViewControllerWithAttribute(attribute: String, rect: CGRect){
-        let colorPickerViewController = storyboard?.instantiateViewControllerWithIdentifier("ColorPickerViewController") as! ColorPickerViewController
+    func showColorPickerViewControllerWithAttribute(_ attribute: String, rect: CGRect){
+        let colorPickerViewController = storyboard?.instantiateViewController(withIdentifier: "ColorPickerViewController") as! ColorPickerViewController
         colorPickerViewController.completion = onComplete(attribute)
-        colorPickerViewController.modalPresentationStyle = .Popover
+        colorPickerViewController.modalPresentationStyle = .popover
 
         let popoverController = UIPopoverController(contentViewController: colorPickerViewController)
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            popoverController.presentPopoverFromRect(rect, inView: self.view, permittedArrowDirections: .Any, animated: true)
+        DispatchQueue.main.async(execute: { () -> Void in
+            popoverController.present(from: rect, in: self.view, permittedArrowDirections: .any, animated: true)
         })
     }
     
-    func showUnderlineStyleAttributeViewControllerForAttribute(attribute: String){
+    func showUnderlineStyleAttributeViewControllerForAttribute(_ attribute: String){
         let underlineStyleAttributes: [Attribute] = [
-            Attribute(name: ".StyleNone", value: NSUnderlineStyle.StyleNone.rawValue),
-            Attribute(name: ".StyleSingle", value: NSUnderlineStyle.StyleSingle.rawValue),
-            Attribute(name: ".StyleThick", value: NSUnderlineStyle.StyleThick.rawValue),
-            Attribute(name: ".StyleDouble", value: NSUnderlineStyle.StyleDouble.rawValue),
+            Attribute(name: ".StyleNone", value: NSUnderlineStyle.styleNone.rawValue),
+            Attribute(name: ".StyleSingle", value: NSUnderlineStyle.styleSingle.rawValue),
+            Attribute(name: ".StyleThick", value: NSUnderlineStyle.styleThick.rawValue),
+            Attribute(name: ".StyleDouble", value: NSUnderlineStyle.styleDouble.rawValue),
             
-            Attribute(name: ".PatternDot", value: NSUnderlineStyle.PatternDot.rawValue),
-            Attribute(name: ".PatternDash", value: NSUnderlineStyle.PatternDash.rawValue),
-            Attribute(name: ".PatternDashDot", value: NSUnderlineStyle.PatternDashDot.rawValue),
-            Attribute(name: ".PatternDashDotDot", value: NSUnderlineStyle.PatternDashDotDot.rawValue),
+            Attribute(name: ".PatternDot", value: NSUnderlineStyle.patternDot.rawValue),
+            Attribute(name: ".PatternDash", value: NSUnderlineStyle.patternDash.rawValue),
+            Attribute(name: ".PatternDashDot", value: NSUnderlineStyle.patternDashDot.rawValue),
+            Attribute(name: ".PatternDashDotDot", value: NSUnderlineStyle.patternDashDotDot.rawValue),
             
-            Attribute(name: ".ByWord", value: NSUnderlineStyle.ByWord.rawValue)
+            Attribute(name: ".ByWord", value: NSUnderlineStyle.byWord.rawValue)
         ]
         
-        let attributeTableViewController = storyboard?.instantiateViewControllerWithIdentifier("AttributeTableViewController") as! AttributeTableViewController
+        let attributeTableViewController = storyboard?.instantiateViewController(withIdentifier: "AttributeTableViewController") as! AttributeTableViewController
         attributeTableViewController.attributes = underlineStyleAttributes
         attributeTableViewController.completion = onComplete(attribute)
         navigationController?.pushViewController(attributeTableViewController, animated: true)
@@ -176,46 +184,53 @@ class AttributeListViewController: UITableViewController {
     
     func showShadowViewController() {
         let shadowViewController =
-        storyboard?.instantiateViewControllerWithIdentifier("ShadowViewController") as! ShadowViewController
-        shadowViewController.completion = onComplete(NSShadowAttributeName)
+        storyboard?.instantiateViewController(withIdentifier: "ShadowViewController") as! ShadowViewController
+        shadowViewController.completion = onComplete(NSAttributedStringKey.shadow.rawValue)
         let range = textRange()
-        let shadow = detailViewController.textStorage.attribute(NSShadowAttributeName, atIndex: range.location, effectiveRange: nil) as? NSShadow
+        let shadow = detailViewController.textStorage.attribute(NSAttributedStringKey.shadow, at: range.location, effectiveRange: nil) as? NSShadow
         shadowViewController.currentShadow = shadow
         navigationController?.pushViewController(shadowViewController, animated: true)
     }
     
     func showParagraphStyleViewController() {
         let paragraphStyleViewController =
-        storyboard?.instantiateViewControllerWithIdentifier("ParagraphStyleViewController") as! ParagraphStyleViewController
+        storyboard?.instantiateViewController(withIdentifier: "ParagraphStyleViewController") as! ParagraphStyleViewController
         let range = textRange()
-        let paragraphStyle = detailViewController.textStorage.attribute(NSParagraphStyleAttributeName, atIndex: range.location, effectiveRange: nil) as? NSParagraphStyle
+        let paragraphStyle = detailViewController.textStorage.attribute(NSAttributedStringKey.paragraphStyle, at: range.location, effectiveRange: nil) as? NSParagraphStyle
         paragraphStyleViewController.currentParagraphStyle = paragraphStyle?.mutableCopy() as? NSMutableParagraphStyle
-        paragraphStyleViewController.completion = onComplete(NSParagraphStyleAttributeName)
+        paragraphStyleViewController.completion = onComplete(NSAttributedStringKey.paragraphStyle.rawValue)
         navigationController?.pushViewController(paragraphStyleViewController, animated: true)
     }
     
     // MARK: - Attribute Value
 
     func textRange() -> NSRange {
-        let range = detailViewController?.textView.selectedRange
-        if range?.length > 0 {
-            return range!;
+        let selectedRange = detailViewController?.textView.selectedRange
+        if let range = selectedRange {
+            if range.length > 0 {
+                return range;
+            }
         }
+        
         return NSMakeRange(0, detailViewController.textStorage!.length);
     }
     
-    func onComplete(attribute: String)(value: AnyObject?) {
+    func onComplete(_ attribute: String) -> (AttributeCompletion) {
         let range = textRange();
-        if let attributeValue: AnyObject = value {
-            detailViewController.textStorage.addAttribute(attribute, value: attributeValue, range:range)
-        } else {
-            detailViewController.textStorage.removeAttribute(attribute, range: range)
+        
+        func fnValue (_ value: AnyObject?) {
+            if let attributeValue: AnyObject = value {
+                detailViewController.textStorage.addAttribute(NSAttributedStringKey(rawValue: attribute), value: attributeValue, range:range)
+            } else {
+                detailViewController.textStorage.removeAttribute(NSAttributedStringKey(rawValue: attribute), range: range)
+            }
         }
+        return fnValue;
     }
     
     // MARK: - Actions
 
-    @IBAction func reset(sender: AnyObject) {
+    @IBAction func reset(_ sender: AnyObject) {
         detailViewController.setupDefaultState()
         tableView.reloadData()
     }

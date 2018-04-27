@@ -13,38 +13,38 @@ class AttributeTableViewController: UITableViewController {
     var attributes = [Attribute]()
     var completion: AttributeCompletion!
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return attributes.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let attribute = attributes[indexPath.row]
         cell.textLabel?.text = attribute.name
-        cell.accessoryType = .None
+        cell.accessoryType = .none
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        cell?.accessoryType = .Checkmark
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = .checkmark
 
         attributeValueChanged()
     }
    
-    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        cell?.accessoryType = .None
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = .none
 
         attributeValueChanged()
     }
         
     func attributeValueChanged(){
         if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
-            let value: Int = selectedIndexPaths.reduce(0, combine: { (res: Int, indexPath: NSIndexPath) -> Int in
+            let value: Int = selectedIndexPaths.reduce(0, { (res: Int, indexPath: IndexPath) -> Int in
                 return res | self.attributes[indexPath.row].value
             })
-            completion(value)
+            completion(value as AnyObject)
         } else {
             completion(nil)
         }

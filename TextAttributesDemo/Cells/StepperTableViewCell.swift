@@ -15,8 +15,8 @@ class StepperTableViewCell: UITableViewCell {
 
     var completion: AttributeCompletion?
 
-    @IBAction func stepperValueChanged(stepper: UIStepper) {
+    @IBAction func stepperValueChanged(_ stepper: UIStepper) {
         stepperValueLabel.text = String(format:"%.1f", stepper.value)
-        completion?(stepper.value)
+        completion?(stepper.value as AnyObject)
     }
 }

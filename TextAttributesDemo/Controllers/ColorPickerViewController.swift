@@ -11,7 +11,7 @@ import UIKit
 class ColorPickerViewController: UIViewController {
     var completion: AttributeCompletion?
     
-    @IBAction func colorButtonDidPress(sender: UIButton) {
+    @IBAction func colorButtonDidPress(_ sender: UIButton) {
         completion?(sender.backgroundColor!)
     }
 }
